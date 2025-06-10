@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Statistics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/stats.css" />
+</head>
+<body>
+  <div class="stats-container">
+    <h1>Quiz Statistics</h1>
+    <div class="summary">
+      <p><strong>Username:</strong> <span id="stat-username"></span></p>
+      <p><strong>Category:</strong> <span id="stat-category"></span></p>
+      <p><strong>Subcategory:</strong> <span id="stat-subcategory"></span></p>
+      <p><strong>Total Questions:</strong> <span id="stat-total"></span></p>
+      <p><strong>Questions Attempted:</strong> <span id="stat-attempted"></span></p>
+      <p><strong>Correct Answers:</strong> <span id="stat-correct"></span></p>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Question</th>
+          <th>Selected Answer</th>
+          <th>Correct Answer</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="stats-table-body">
+        <!-- Rows will be injected here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="javascript/stats.js"></script>
+</body>
+</html>

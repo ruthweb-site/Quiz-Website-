@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/quiz-guide.css" />
+</head>
+<body>
+
+  <div class="guide-wrapper">
+    <header class="guide-header">
+      <h1>📘 Quiz Guide</h1>
+      <p>Master your quiz with these smart strategies!</p>
+    </header>
+
+    <main class="guide-main">
+      <div class="accordion">
+        <div class="accordion-item" onclick="toggleGuide(0)">
+          <h2>1. Know Your Quiz Rules</h2>
+          <div class="accordion-content">Understand time limits, scoring, and structure before you start.</div>
+        </div>
+
+        <div class="accordion-item" onclick="toggleGuide(1)">
+          <h2>2. Focus on Accuracy</h2>
+          <div class="accordion-content">Read questions carefully and eliminate wrong answers first.</div>
+        </div>
+
+        <div class="accordion-item" onclick="toggleGuide(2)">
+          <h2>3. Don't Panic</h2>
+          <div class="accordion-content">Stay calm under pressure—breathe and take it question by question.</div>
+        </div>
+
+        <div class="accordion-item" onclick="toggleGuide(3)">
+          <h2>4. Use Time Wisely</h2>
+          <div class="accordion-content">Don’t linger too long on hard questions; mark and revisit if needed.</div>
+        </div>
+      </div>
+
+      <div class="btn-container">
+        <button class="exit-btn" onclick="window.location.href='quiz-section.html'">Exit to Quiz</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function toggleGuide(index) {
+      const items = document.querySelectorAll('.accordion-item');
+      items.forEach((item, i) => {
+        const content = item.querySelector('.accordion-content');
+        if (i === index) {
+          content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
+        } else {
+          item.querySelector('.accordion-content').style.maxHeight = null;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

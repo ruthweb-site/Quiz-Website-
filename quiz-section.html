@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/quiz-section.css">
+</head>
+<body>
+    
+    <header>
+       <nav>
+        <a href="home.html">Home</a>
+        <a href="quiz-section.html">Quiz</a>
+        <a href="statistics.html">Statistics</a>
+        <a href="#" id="signout" style="display: none;">Sign Out</a> 
+    </nav> 
+</header>
+    <!-- carousel -->
+    <div class="carousel">
+        <!-- list item -->
+        <div class="list">
+            <div class="item">
+                <img src="images/quiz-section1.png">
+                <div class="content">
+                    <div class="author">Quiz World</div>
+                    <div class="title">KNOWLEDGE CHALLENGE</div>
+                    <div class="topic">Programming Language</div>
+                    <div class="des">
+                        <!-- lorem 50 -->
+                         Dive into the world of code! Test your knowledge in languages like Python, C++, Java, and JavaScript. Perfect for beginners to pros, this quiz covers syntax, logic, and key programming concepts.
+                         Sharpen your coding skills and challenge yourself with real-world scenarios!
+                    </div>
+                    <div class="buttons">
+                        <button class="start-quiz-btn" data-category="programming">Start Quiz</button>
+                        <button onclick="window.location.href='quiz-guide.html'">Quiz Guide</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/quiz-section2.jpg">
+                <div class="content">
+                    <div class="author">QUIZ MASTER</div>
+                    <div class="title">KNOWLEDGE CHALLENGE</div>
+                    <div class="topic">Sports</div>
+                    <div class="des">
+                        From cricket to football, Olympics to F1 racing — challenge yourself with trivia about players, rules, historic matches, and world records across the globe’s favorite games.
+Explore the moments     that shaped sports history and the legends who made them unforgettable.
+                    </div>
+                    <div class="buttons">
+                        <button class="start-quiz-btn" data-category="sports">Start Quiz</button>
+                        <button onclick="window.location.href='quiz-guide.html'">Quiz Guide</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/quiz-section3.jpg">
+                <div class="content">
+                    <div class="author">QUIZ MASTER</div>
+                    <div class="title">KNOWLEDGE CHALLENGE</div>
+                    <div class="topic">TRAVEL & WONDERS</div>
+                    <div class="des">
+                        Explore the globe from your screen! Test your knowledge about world wonders, iconic landmarks, exotic places, and geography facts from every corner of the Earth.
+                        Uncover fascinating travel trivia and discover places you never knew existed 
+                    </div>
+                    <div class="buttons">
+                        <button class="start-quiz-btn" data-category="travel">Start Quiz</button>
+                        <button onclick="window.location.href='quiz-guide.html'">Quiz Guide</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/quiz-section4.jpeg">
+                <div class="content">
+                     <div class="author">QUIZ MASTER</div>
+                     <div class="title">COMING SOON</div>
+                     <div class="topic">FILM & ENTERTAINMENT</div>
+                    <div class="des">
+                        Lights, camera, quiz! Explore trivia from Bollywood to Hollywood, famous actors, iconic movies, OTT series, awards, soundtracks, and blockbuster quotes that made history.
+                       <br> <strong>Get ready — the Film & Entertainment quiz is launching soon with exciting questions and surprises!</strong>
+                    </div>
+                     <div class="buttons">
+                        <button>Coming Soon</button>
+                        <button onclick="window.location.href='quiz-guide.html'">Quiz Guide</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- list thumnail -->
+        <div class="thumbnail">
+            <div class="item">
+                <img src="images/quiz-section1.png">
+                <div class="content">
+                    <div class="title">
+                        Programming
+                    </div>
+                    <div class="description">
+                        Description
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/quiz-section2.jpg">
+                <div class="content">
+                    <div class="title">
+                        Sports
+                    </div>
+                    <div class="description">
+                        Description
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/quiz-section3.jpg">
+                <div class="content">
+                    <div class="title">
+                        Travel
+                    </div>
+                    <div class="description">
+                        Description
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/quiz-section4.jpeg">
+                <div class="content">
+                    <div class="title">
+                        Entertainment
+                    </div>
+                    <div class="description">
+                        Description
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- next prev -->
+
+        <div class="arrows">
+            <button id="prev"><</button>
+            <button id="next">></button>
+        </div>
+        <!-- time running -->
+        <div class="time"></div>
+    </div>
+
+    <script src="javascript/quiz-section.js"></script>
+</body>
+</html>

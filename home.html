@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Website Landing Page - With Background Video Slider | Travel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  </head>
+  <body>
+    <header>
+        <a href="#" class="brand">Quiz</a>
+        <div class="menu-btn"></div>
+        <div class="navigation">
+            <div class="navigation-items">
+            <a href="home.html">Home</a>
+            <a href="quiz-section.html">Quiz</a>
+            <a href="statistics.html">Statistics</a>
+            <a href="#" id="signout" style="display:none;">SignOut</a>  <!-- Initially hidden -->
+            </div>
+
+        </div>
+    </header>
+
+    <section class="home">
+       <div class="image-slider active"></div>
+        <div class="image-slider"></div>
+        <div class="image-slider"></div>
+        <div class="image-slider"></div>
+
+       <div class="content active">
+        <h1>Welcome To <br><span>Quiz World</span></h1>
+        <p>Dive into the ultimate brain challenge! Test your knowledge across thrilling topics, compete with others, learn new facts, and climb your way to the top in a world built for passionate quiz lovers.</p>
+
+        <a href="">Explore Now</a>
+        </div>
+
+       <div class="content">
+        <h1>Coming Soon <br><span>New Quiz </span></h1>
+        <p>Get ready for exciting new topics, fresh questions, and mind-blowing twists...</p>
+        <button class="joke-btn" onclick="showJoke()">Tell Me a Joke</button>
+      </div>
+
+        <div class="content">
+        <h1>Discover <br><span>Quiz Categories</span></h1>
+        <p>From Programming to Space, Sports to History — there's something for every curious mind. Pick your favorite category, challenge your limits, and discover how far your knowledge can take you.</p>
+        <a href="#">Explore Topics</a>
+        </div>
+
+        <div class="content">
+        <h1>Earn <br><span>Badges & Glory</span></h1>
+        <p>Score high, unlock rare achievements, and climb the leaderboard. Every quiz is a step toward greatness — prove your skills and let the world see your quiz mastery in action!</p>
+        <a href="#">Start Competing</a>
+        </div>
+
+
+        <div class="slider-navigation">
+            <div class="nav-btn active"></div>
+            <div class="nav-btn"></div>
+            <div class="nav-btn"></div>
+            <div class="nav-btn"></div>
+            
+
+        </div>
+
+        <!-- Modern Joke Alert -->
+      <div id="jokeAlert" class="joke-alert">
+        <p id="jokeText">This is a joke.</p>
+        <button onclick="closeJoke()">OK</button>
+      </div>
+
+    </section>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const menuBtn = document.querySelector('.menu-btn');
+    const navigation = document.querySelector('.navigation');
+
+    menuBtn.addEventListener('click', () => {
+        menuBtn.classList.toggle('active');
+        navigation.classList.toggle('active');
+    });
+
+    const btns = document.querySelectorAll(".nav-btn");
+    const slides = document.querySelectorAll(".image-slider");
+    const contents = document.querySelectorAll(".content");
+
+    var slideNav = function(manual){
+        btns.forEach((btn) => {
+            btn.classList.remove("active");
+        });
+        slides.forEach((slide) => {
+            slide.classList.remove("active");
+        });
+        contents.forEach((content) => {
+            content.classList.remove("active");
+        });
+        btns[manual].classList.add("active");
+        slides[manual].classList.add("active");
+        contents[manual].classList.add("active");
+    };
+
+    btns.forEach((btn, i) => {
+        btn.addEventListener("click", () => {
+            slideNav(i);
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Your existing code...
+
+  // Show SignOut only if logged in
+  if (localStorage.getItem('loggedIn') === 'true') {
+    document.getElementById('signout').style.display = 'inline-block';
+  }
+});
+
+document.getElementById('signout').addEventListener('click', function(e) {
+  e.preventDefault();
+  localStorage.removeItem('loggedIn'); // Remove login flag
+  window.location.href = 'login.html'; // Redirect to login page
+});
+
+function showJoke() {
+  const alertBox = document.getElementById("jokeAlert");
+  const jokeText = document.getElementById("jokeText");
+
+  fetch("https://v2.jokeapi.dev/joke/Programming?type=twopart")
+    .then(res => res.json())
+    .then(data => {
+      jokeText.innerText = `${data.setup} 🤔\n\n${data.punchline} 😂`;
+      alertBox.style.display = "block";
+    })
+    .catch(err => {
+      jokeText.innerText = "Oops! Couldn't fetch a joke right now.";
+      alertBox.style.display = "block";
+    });
+}
+
+function closeJoke() {
+  document.getElementById("jokeAlert").style.display = "none";
+}
+
+
+</script>
+
+  </body>
+</html>
