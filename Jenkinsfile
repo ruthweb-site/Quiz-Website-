@@ -7,11 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/ruthweb-site/Quiz-Website-'
-            }
-        }
 
         stage('Build Images') {
             steps {
