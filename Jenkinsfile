@@ -16,8 +16,8 @@ pipeline {
 
         stage('Build Images') {
             steps {
-                sh 'docker build -t quiz-backend:v1 ./backend'
-                sh 'docker build -t quiz-frontend:v1 ./frontend'
+                sh 'docker build -t ruthran1803/quiz-backend:v1 ./backend'
+                sh 'docker build -t ruthran1803/quiz-frontend:v1 ./frontend'
             }
         }
 
@@ -35,8 +35,8 @@ pipeline {
 
         stage('Push Images') {
             steps {
-                sh 'docker push quiz-frontend:v1'
-                sh 'docker push quiz-backend:v1'
+                sh 'docker push ruthran1803/quiz-frontend:v1'
+                sh 'docker push ruthran1803/quiz-backend:v1'
             }
         }
     }
