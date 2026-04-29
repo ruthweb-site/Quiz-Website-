@@ -2,12 +2,11 @@ pipeline {
     agent any
 
     environment {
-        BACKEND_IMAGE = "ruthran1803/quiz-backend:latest"
-        FRONTEND_IMAGE = "ruthran1803/quiz-frontend:latest"
+        BACKEND_IMAGE = "ruthran1803/quiz-backend:v2"
+        FRONTEND_IMAGE = "ruthran1803/quiz-frontend:v2"
     }
 
     stages {
-
         stage('Checkout Code') {
             steps {
                 git 'https://github.com/ruthweb-site/Quiz-Website-'
@@ -16,8 +15,8 @@ pipeline {
 
         stage('Build Images') {
             steps {
-                sh 'docker build -t ruthran1803/quiz-backend:v2 ./backend'
-                sh 'docker build -t ruthran1803/quiz-frontend:v2 ./frontend'
+                sh "docker build -t ${BACKEND_IMAGE} ./backend"
+                sh "docker build -t ${FRONTEND_IMAGE} ./frontend"
             }
         }
 
@@ -35,15 +34,15 @@ pipeline {
 
         stage('Push Images') {
             steps {
-                sh 'docker push ruthran1803/quiz-backend:v2'
-                sh 'docker push ruthran1803/quiz-frontend:v2'
+                sh "docker push ${BACKEND_IMAGE}"
+                sh "docker push ${FRONTEND_IMAGE}"
             }
         }
     }
 
     post {
         success {
-            echo 'Both frontend & backend pushed '
+            echo "Successfully pushed ${BACKEND_IMAGE} and ${FRONTEND_IMAGE} to Docker Hub!"
         }
     }
 }
