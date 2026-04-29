@@ -10,8 +10,8 @@ pipeline {
 
         stage('Build Images') {
             steps {
-                sh "docker build -t ${BACKEND_IMAGE} ./backend"
-                sh "docker build -t ${FRONTEND_IMAGE} ./frontend"
+                bat "docker build -t %BACKEND_IMAGE% ./backend"
+                bat "docker build -t %FRONTEND_IMAGE% ./frontend"
             }
         }
 
@@ -22,22 +22,22 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
                 }
             }
         }
 
         stage('Push Images') {
             steps {
-                sh "docker push ${BACKEND_IMAGE}"
-                sh "docker push ${FRONTEND_IMAGE}"
+                bat "docker push %BACKEND_IMAGE%"
+                bat "docker push %FRONTEND_IMAGE%"
             }
         }
     }
 
     post {
         success {
-            echo "Successfully pushed ${BACKEND_IMAGE} and ${FRONTEND_IMAGE} to Docker Hub!"
+            echo "Successfully pushed images to Docker Hub!"
         }
     }
 }
