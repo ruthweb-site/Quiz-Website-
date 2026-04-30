@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # The Backend Service
+  quiz-backend:
+    image: ruthran1803/quiz-backend:v2
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      # Add your MongoDB connection string here if you have one
+      - MONGO_URI=mongodb://ruthran_quiz:ruthran_1803@ac-z2ftgo6-shard-00-00.klktq46.mongodb.net:27017,ac-z2ftgo6-shard-00-01.klktq46.mongodb.net:27017,ac-z2ftgo6-shard-00-02.klktq46.mongodb.net:27017/quizapp?ssl=true&replicaSet=atlas-1379il-shard-0&authSource=admin&retryWrites=true&w=majority
+    restart: always
+
+  # The Frontend Service
+  quiz-frontend:
+    image: ruthran1803/quiz-frontend:v2
+    ports:
+      - "8090:80"
+    depends_on:
+      - quiz-backend
+    restart: always
+
+networks:
+  default:
+    name: quiz-network
