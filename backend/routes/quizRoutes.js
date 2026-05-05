@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Result = require('../models/Result');
 const { protect } = require('../middleware/auth');
-const { quizSubmissionsCounter } = require('../middleware/prometheus');
 
 // POST /api/quiz/submit  (protected)
 // Saves a completed quiz result to MongoDB Atlas
@@ -20,9 +19,6 @@ router.post('/submit', protect, async (req, res) => {
     if (!category || !subcategory || numberOfQuestions === undefined || correctAnswers === undefined) {
       return res.status(400).json({ success: false, message: 'Missing required quiz result fields' });
     }
-
-    // Increment Prometheus counter
-    quizSubmissionsCounter.inc({ category, subcategory });
 
     const score = numberOfQuestions > 0
       ? Math.round((correctAnswers / numberOfQuestions) * 100)

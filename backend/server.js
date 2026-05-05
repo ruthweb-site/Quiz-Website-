@@ -4,7 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const dns = require('dns');
 require('dotenv').config();
-const { register, httpRequestDurationMicroseconds } = require('./middleware/prometheus');
 
 // Fix for querySrv ECONNREFUSED issues in some Node environments
 if (dns.setDefaultResultOrder) {
@@ -18,30 +17,8 @@ console.log('📂 Frontend Path:', path.join(__dirname, '..', 'frontend'));
 // ─── Middleware ──────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
-// ─── Metrics Endpoint ──────────────────────────────────
-app.get(['/metrics', '/api/metrics', '/api/check-metrics'], async (req, res) => {
-  console.log('📊 Metrics endpoint triggered!');
-  try {
-    const data = await register.metrics();
-    res.setHeader('Content-Type', register.contentType);
-    res.send(data || 'NO_METRICS_DATA_YET');
-  } catch (ex) {
-    console.error('💥 Metrics Error:', ex);
-    res.status(500).send('ERROR_COLLECTING_METRICS');
-  }
-});
 
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
-
-
-// Track duration for all requests
-app.use((req, res, next) => {
-  const end = httpRequestDurationMicroseconds.startTimer();
-  res.on('finish', () => {
-    end({ method: req.method, route: req.path, code: res.statusCode });
-  });
-  next();
-});
 
 // ─── Serve login page as entry point ──────────────────
 app.get('/', (req, res) => {
