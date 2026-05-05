@@ -68,7 +68,19 @@ If you just want to run the code on your laptop without Docker or Kubernetes:
 
 ## 🛳️ How to Deploy to Kubernetes
 
-For detailed, step-by-step instructions on how to build the Docker images and deploy this entire application into a Kubernetes cluster, please refer to the **[`commands.md`](./commands.md)** file!
+For detailed, step-by-step instructions on how to build the Docker images and deploy this entire application into a Kubernetes cluster manually, please refer to the **[`commands.md`](./commands.md)** file!
+
+---
+
+## ⚙️ CI/CD Pipeline (Jenkins)
+
+This project is configured with a fully automated Jenkins CI/CD pipeline. 
+
+### How it works:
+1. **GitHub Webhook**: Whenever you push code to the `main` branch on GitHub, GitHub automatically sends a webhook signal to your Jenkins server.
+2. **Jenkinsfile**: Jenkins reads the `Jenkinsfile` in the root of the project.
+3. **Automated Build & Push**: Jenkins automatically builds the new Docker images (`quiz-frontend:latest` and `quiz-backend:latest`) and pushes them directly to Docker Hub.
+4. **Kubernetes Rollout**: Once Jenkins finishes, simply run `kubectl rollout restart deployment quiz-frontend` locally to pull the newest images and see your changes live!
 
 ## 🔐 Security Notes
 - Never commit your `backend/.env` or `k8s/secrets.yaml` files to GitHub.

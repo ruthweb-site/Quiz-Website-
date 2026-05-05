@@ -114,6 +114,23 @@ If you make changes to the HTML, CSS, or backend code, here is how you update th
 3. **Hard Refresh your Browser:**
    Press `Ctrl + F5` on the website to see the new changes!
 
+## 🤖 Automated Updates (Jenkins CI/CD)
+If you have Jenkins configured with your GitHub repository:
+
+1. **Push your code to GitHub:**
+   ```bash
+   git add .
+   git commit -m "your update message"
+   git push origin main
+   ```
+2. **Wait for Jenkins:** Jenkins will automatically trigger, build the Docker images, and push them to Docker Hub for you.
+3. **Tell Kubernetes to pull the new Image:**
+   ```bash
+   kubectl rollout restart deployment quiz-frontend
+   ```
+4. **Hard Refresh your Browser:**
+   Press `Ctrl + F5` on the website to see the new changes!
+
 ---
 
 ## 🧹 Useful Troubleshooting Commands
