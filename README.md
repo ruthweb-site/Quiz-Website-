@@ -19,6 +19,33 @@ This application follows a **3-Tier Architecture**:
 3. **Database (Data Tier):**
    - Uses MongoDB Atlas (Cloud Database) to store user accounts, passwords (hashed securely), and quiz result history.
 
+### 📊 System Workflow Diagram
+```mermaid
+flowchart TD
+    %% User Action
+    User((Developer)) -->|1. git push| GitHub[GitHub Repository]
+    
+    %% CI/CD Pipeline
+    subgraph CI/CD Pipeline
+        GitHub -->|2. Webhook Trigger| Jenkins[Jenkins Server]
+        Jenkins -->|3. Build & Test| Docker[Docker Engine]
+        Docker -->|4. Push Image| DockerHub[(Docker Hub)]
+    end
+    
+    %% Deployment
+    subgraph Kubernetes Cluster
+        Jenkins -.->|5. kubectl rollout restart| K8s[Kubernetes Control Plane]
+        K8s -->|Pulls Image| DockerHub
+        K8s --> Frontend[Frontend Pods\nport: 80]
+        K8s --> Backend[Backend Pods\nport: 3000]
+    end
+    
+    %% Application Flow
+    Frontend <-->|API Calls| Backend
+    Backend <-->|CRUD Data| MongoDB[(MongoDB Atlas)]
+    Backend <-->|Generate AI Quiz| Gemini[Google Gemini API]
+```
+
 ---
 
 ## 🛠️ Prerequisites
