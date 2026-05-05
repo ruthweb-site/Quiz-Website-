@@ -6,6 +6,7 @@ const questionStatus = document.querySelector(".question-status");
 const timerDisplay = document.querySelector(".time-duration");
 const resultContainer = document.querySelector(".result-container");
 const subcategoryOptionsContainer = document.querySelector(".subcategory-options");
+const submitResultBtn = document.querySelector(".submit-result-btn");
 
 const QUIZ_TIME_LIMIT = 20;
 let currentTime = QUIZ_TIME_LIMIT;
@@ -30,6 +31,22 @@ let quizStats = {
 
 function generateSubcategoryOptions(mainCategory) {
   subcategoryOptionsContainer.innerHTML = "";
+  
+  if (mainCategory === 'ai') {
+    const topic = localStorage.getItem('aiTopic') || 'Generated';
+    const btn = document.createElement("button");
+    btn.className = "subcategory-option active";
+    btn.textContent = `AI: ${topic}`;
+    quizSubCategory = topic;
+    subcategoryOptionsContainer.appendChild(btn);
+    
+    // Auto start quiz for AI if we just redirected
+    if (localStorage.getItem('aiQuizData')) {
+        setTimeout(() => startQuiz(), 500);
+    }
+    return;
+  }
+
   const subcategories = Object.keys(questions[mainCategory] || {});
 
   if (subcategories.length === 0) {
@@ -78,7 +95,14 @@ function startTimer() {
 }
 
 function getRandomQuestion() {
-  const categoryQuestions = questions[quizMainCategory]?.[quizSubCategory] || [];
+  let categoryQuestions = [];
+  
+  if (quizMainCategory === 'ai') {
+    categoryQuestions = JSON.parse(localStorage.getItem('aiQuizData') || '[]');
+  } else {
+    categoryQuestions = questions[quizMainCategory]?.[quizSubCategory] || [];
+  }
+
   if (questionsIndexHistory.length >= Math.min(categoryQuestions.length, numberOfQuestions)) return null;
   const availableQuestions = categoryQuestions.filter((_, index) => !questionsIndexHistory.includes(index));
   const randomQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
@@ -134,10 +158,39 @@ function renderQuestion() {
 }
 
 function startQuiz() {
-  configContainer.style.display = "none";
-  quizContainer.style.display = "block";
+  // For AI quiz, skip subcategory/question validation
+  if (quizMainCategory === 'ai') {
+    const aiData = JSON.parse(localStorage.getItem('aiQuizData') || '[]');
+    if (aiData.length === 0) {
+      alert("No AI quiz data found. Please generate a quiz first.");
+      return;
+    }
+    const topic = localStorage.getItem('aiTopic') || 'AI Generated';
+    quizSubCategory = topic;
+    numberOfQuestions = aiData.length;
 
-  // Get active subcategory and question count
+    configContainer.style.display = "none";
+    quizContainer.style.display = "block";
+
+    // Reset stats
+    correctAnswerCount = 0;
+    questionsIndexHistory = [];
+
+    quizStats = {
+      username: localStorage.getItem("quizUsername") || "Guest",
+      category: 'ai',
+      subcategory: topic,
+      numberOfQuestions: numberOfQuestions,
+      correctAnswers: 0,
+      questionsAttempted: 0,
+      answersLog: []
+    };
+
+    renderQuestion();
+    return;
+  }
+
+  // Normal quiz flow — validate first, THEN hide config
   const activeSubcat = configContainer.querySelector(".subcategory-option.active");
   const activeQuestionCount = configContainer.querySelector(".question-option.active");
 
@@ -149,6 +202,9 @@ function startQuiz() {
   quizSubCategory = activeSubcat.textContent;
   numberOfQuestions = parseInt(activeQuestionCount.textContent);
 
+  configContainer.style.display = "none";
+  quizContainer.style.display = "block";
+
   // Reset stats
   correctAnswerCount = 0;
   questionsIndexHistory = [];
@@ -156,7 +212,7 @@ function startQuiz() {
   // Prepare stats object
   quizStats = {
     username: localStorage.getItem("quizUsername") || "Guest",
-    category: quizMainCategory, // fixed category
+    category: quizMainCategory,
     subcategory: quizSubCategory,
     numberOfQuestions: numberOfQuestions,
     correctAnswers: 0,
@@ -166,6 +222,7 @@ function startQuiz() {
 
   renderQuestion(); // Start the first question
 }
+
 
 
 
@@ -188,87 +245,71 @@ function showQuizResult() {
 
   localStorage.setItem("quizStats", JSON.stringify(quizStats));
 
-  // ─── Tier 2: Submit result to backend API ─────────────
+  // ─── Manual Submission via Button ─────────────────────
   const token = localStorage.getItem("quizToken");
-  if (token) {
-    fetch('/api/quiz/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify({
-        category: quizStats.category,
-        subcategory: quizStats.subcategory,
-        numberOfQuestions: quizStats.numberOfQuestions,
-        questionsAttempted: quizStats.questionsAttempted,
-        correctAnswers: quizStats.correctAnswers,
-        answersLog: quizStats.answersLog
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        console.log('✅ Quiz result saved to database');
-      } else {
-        console.warn('⚠ Failed to save result:', data.message);
-      }
-    })
-    .catch(err => {
-      console.warn('⚠ Backend unavailable, result saved locally only:', err.message);
-    });
-  }
+  if (submitResultBtn) {
+    submitResultBtn.style.display = "block";
 
-  console.log("Checking joke condition:", quizStats.correctAnswers, quizStats.numberOfQuestions);
-
-  if (quizStats.correctAnswers < quizStats.numberOfQuestions / 2) {
-    showJokePopup();  // ✅ Will now work correctly
-  }
-  
-}
-
-
-async function showJokePopup() {
-  let popup = document.querySelector(".joke-popup");
-
-  if (!popup) {
-    popup = document.createElement("div");
-    popup.className = "joke-popup";
-    popup.innerHTML = `
-      <div class="joke-content">
-        <span class="material-symbols-rounded close-icon">close</span>
-        <p class="joke-text">Loading joke...</p>
-      </div>`;
-    document.body.appendChild(popup);
-
-    popup.querySelector(".close-icon").addEventListener("click", () => {
-      popup.style.display = "none";
-    });
-  }
-
-  popup.style.display = "flex";
-  const jokeText = popup.querySelector(".joke-text");
-  jokeText.textContent = "Loading joke...";
-
-  try {
-    const res = await fetch("https://v2.jokeapi.dev/joke/Programming?type=twopart", {
-      headers: { Accept: "application/json" }
-    });
-    const data = await res.json();
-
-    if (data.setup && data.delivery) {
-      // ✅ Properly show two-part joke
-      jokeText.innerHTML = `😂 Joke: <b>${data.setup}</b><br>${data.delivery}`;
-    } else if (data.joke) {
-      jokeText.innerHTML = `😂 Joke: ${data.joke}`;
+    if (!token) {
+      // No token = login didn't reach the backend
+      submitResultBtn.textContent = "⚠️ Not logged in to server - Login again";
+      submitResultBtn.style.background = "#ff9800";
+      submitResultBtn.disabled = false;
+      submitResultBtn.onclick = () => {
+        window.location.href = "login.html";
+      };
     } else {
-      jokeText.innerHTML = `😅 Joke: Oops! No joke found.`;
+      // Has token = can submit
+      submitResultBtn.textContent = "Submit Score to Leaderboard";
+      submitResultBtn.style.background = "#28a745";
+      submitResultBtn.disabled = false;
+
+      submitResultBtn.onclick = () => {
+        submitResultBtn.disabled = true;
+        submitResultBtn.textContent = "Submitting...";
+        submitResultBtn.style.background = "#666";
+
+        fetch('/api/quiz/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            category: quizStats.category,
+            subcategory: quizStats.subcategory,
+            numberOfQuestions: quizStats.numberOfQuestions,
+            questionsAttempted: quizStats.questionsAttempted,
+            correctAnswers: quizStats.correctAnswers,
+            answersLog: quizStats.answersLog
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            submitResultBtn.textContent = "✅ Successfully Submitted!";
+            submitResultBtn.style.background = "#28a745";
+          } else {
+            submitResultBtn.textContent = "❌ Error: " + (data.message || "Failed");
+            submitResultBtn.style.background = "#dc3545";
+            submitResultBtn.disabled = false;
+          }
+        })
+        .catch(err => {
+          submitResultBtn.textContent = "❌ Backend Unavailable: " + err.message;
+          submitResultBtn.style.background = "#dc3545";
+          submitResultBtn.disabled = false;
+          console.warn('⚠ Submission error:', err.message);
+        });
+      };
     }
-  } catch (error) {
-    jokeText.textContent = "Failed to fetch a joke. Please try again!";
-    console.error("Joke API error:", error);
   }
+
 }
+
+
+
+
 
 document.querySelectorAll(".category-option").forEach(btn => {
   btn.addEventListener("click", () => {

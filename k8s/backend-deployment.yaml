@@ -39,6 +39,18 @@ spec:
               name: backend-config
               key: PORT
 
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: GEMINI_API_KEY
+
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: JWT_SECRET
+
         resources:
           requests:
             cpu: "50m"

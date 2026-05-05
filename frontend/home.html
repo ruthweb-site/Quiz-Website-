@@ -15,6 +15,7 @@
             <div class="navigation-items">
             <a href="home.html">Home</a>
             <a href="quiz-section.html">Quiz</a>
+            <a href="#" id="ai-quiz-nav" class="ai-nav-link">AI Quiz ✨</a>
             <a href="statistics.html">Statistics</a>
             <a href="#" id="signout" style="display:none;">SignOut</a>  <!-- Initially hidden -->
             </div>
@@ -23,7 +24,8 @@
     </header>
 
     <section class="home">
-       <div class="image-slider active"></div>
+        <div class="image-slider active"></div>
+        <div class="image-slider"></div>
         <div class="image-slider"></div>
         <div class="image-slider"></div>
         <div class="image-slider"></div>
@@ -53,9 +55,20 @@
         <a href="#">Start Competing</a>
         </div>
 
+        <div class="content">
+          <h1>AI <br><span>Quiz Magic</span></h1>
+          <p>Don't see your favorite topic? Let our AI build a custom quiz for you in seconds. Just type any topic and watch the magic happen!</p>
+          <div class="ai-input-group">
+            <input type="text" id="ai-topic" placeholder="Enter any topic (e.g. Quantum Physics)">
+            <button id="generate-ai-btn">Generate Quiz</button>
+          </div>
+          <div id="ai-status" style="margin-top: 10px; color: #fff; font-size: 0.9em; display: none;">Generating questions...</div>
+        </div>
+
 
         <div class="slider-navigation">
             <div class="nav-btn active"></div>
+            <div class="nav-btn"></div>
             <div class="nav-btn"></div>
             <div class="nav-btn"></div>
             <div class="nav-btn"></div>
@@ -68,6 +81,21 @@
         <p id="jokeText">This is a joke.</p>
         <button onclick="closeJoke()">OK</button>
       </div>
+
+    <!-- Floating AI Quiz Panel -->
+    <div id="ai-floating-panel" class="ai-floating-panel" style="display:none;">
+      <div class="ai-panel-overlay" onclick="closeAIPanel()"></div>
+      <div class="ai-panel-content">
+        <button class="ai-panel-close" onclick="closeAIPanel()">&times;</button>
+        <h2>🤖 AI Quiz Generator</h2>
+        <p>Enter any topic and let AI create a custom quiz for you!</p>
+        <div class="ai-panel-input-group">
+          <input type="text" id="ai-panel-topic" placeholder="e.g. Quantum Physics, Space, History...">
+          <button id="ai-panel-generate-btn">Generate Quiz</button>
+        </div>
+        <div id="ai-panel-status" style="margin-top: 12px; color: #00e1ff; font-size: 0.9em; display: none;"></div>
+      </div>
+    </div>
 
     </section>
 
@@ -142,8 +170,70 @@ function closeJoke() {
   document.getElementById("jokeAlert").style.display = "none";
 }
 
+// ─── AI Quiz Floating Panel ─────────────────────────
+function openAIPanel() {
+  document.getElementById('ai-floating-panel').style.display = 'flex';
+}
+function closeAIPanel() {
+  document.getElementById('ai-floating-panel').style.display = 'none';
+}
+
+// Nav link opens the panel
+document.getElementById('ai-quiz-nav')?.addEventListener('click', function(e) {
+  e.preventDefault();
+  openAIPanel();
+});
+
+// AI Panel generate button logic
+document.getElementById('ai-panel-generate-btn')?.addEventListener('click', async function() {
+  const topicInput = document.getElementById('ai-panel-topic');
+  const statusText = document.getElementById('ai-panel-status');
+  const generateBtn = this;
+  const topic = topicInput.value.trim();
+
+  if (!topic) {
+    alert('Please enter a topic first!');
+    return;
+  }
+
+  if (localStorage.getItem('loggedIn') !== 'true') {
+    alert('Please login first to use the AI Generator.');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    generateBtn.disabled = true;
+    statusText.style.display = 'block';
+    statusText.textContent = '🚀 Gemini is thinking... please wait.';
+
+    const response = await fetch('/api/ai/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      statusText.textContent = '✅ Questions ready! Launching quiz...';
+      localStorage.setItem('selectedCategory', 'ai');
+      localStorage.setItem('aiQuizData', JSON.stringify(data.questions));
+      localStorage.setItem('aiTopic', topic);
+      setTimeout(() => { window.location.href = 'quiz.html'; }, 1000);
+    } else {
+      throw new Error(data.message || 'Failed to generate questions');
+    }
+  } catch (error) {
+    console.error('AI Generation Error:', error);
+    statusText.textContent = '❌ Error: ' + error.message;
+    generateBtn.disabled = false;
+  }
+});
 
 </script>
+  <script src="javascript/ai-quiz.js"></script>
+
 
   </body>
 </html>

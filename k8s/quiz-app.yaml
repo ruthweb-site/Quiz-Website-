@@ -14,22 +14,39 @@ spec:
     spec:
       containers:
       - name: quiz-backend
-        image: ruthran1803/quiz-backend:v2
+        image: quiz-backend:v3
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         env:
         - name: MONGO_URI
-          value: "mongodb://ruthran_quiz:ruthran_1803@ac-z2ftgo6-shard-00-00.klktq46.mongodb.net:27017,ac-z2ftgo6-shard-00-01.klktq46.mongodb.net:27017,ac-z2ftgo6-shard-00-02.klktq46.mongodb.net:27017/quizapp?ssl=true&replicaSet=atlas-1379il-shard-0&authSource=admin&retryWrites=true&w=majority"
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: MONGO_URI
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: GEMINI_API_KEY
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: JWT_SECRET
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: quiz-backend-service
+  labels:
+    app: quiz-backend
 spec:
   selector:
     app: quiz-backend
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 3000
       targetPort: 3000
   type: ClusterIP
@@ -52,7 +69,8 @@ spec:
     spec:
       containers:
       - name: quiz-frontend
-        image: ruthran1803/quiz-frontend:v2
+        image: quiz-frontend:v7
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
 ---

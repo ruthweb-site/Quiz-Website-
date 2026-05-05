@@ -385,3 +385,206 @@ section {
     padding: 100px 20px;
   }
 }
+
+/* AI Input Group */
+.ai-input-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  max-width: 500px;
+}
+
+.ai-input-group input {
+  flex: 1;
+  padding: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
+}
+
+.ai-input-group input:focus {
+  border-color: #00e1ff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ai-input-group button {
+  padding: 15px 25px;
+  background: #00e1ff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.ai-input-group button:hover {
+  background: #fff;
+  transform: translateY(-2px);
+}
+
+.ai-input-group button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* AI Quiz Nav Link - Glowing */
+.ai-nav-link {
+  color: #00e1ff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 8px rgba(0, 225, 255, 0.6);
+  animation: aiGlow 2s ease-in-out infinite;
+}
+
+@keyframes aiGlow {
+  0%, 100% { text-shadow: 0 0 8px rgba(0, 225, 255, 0.4); }
+  50% { text-shadow: 0 0 20px rgba(0, 225, 255, 0.9), 0 0 40px rgba(0, 225, 255, 0.3); }
+}
+
+/* Floating AI Panel */
+.ai-floating-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: panelFadeIn 0.3s ease;
+}
+
+@keyframes panelFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ai-panel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.ai-panel-content {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15, 32, 39, 0.95), rgba(32, 58, 67, 0.95), rgba(44, 83, 100, 0.95));
+  border: 1px solid rgba(0, 225, 255, 0.3);
+  border-radius: 20px;
+  padding: 40px 45px;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 225, 255, 0.15);
+  animation: panelSlideUp 0.4s ease;
+}
+
+@keyframes panelSlideUp {
+  from { transform: translateY(30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.ai-panel-content h2 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, #00e1ff, #7b61ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ai-panel-content p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 25px;
+  font-size: 1rem;
+}
+
+.ai-panel-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 28px;
+  cursor: pointer;
+  transition: 0.3s;
+  line-height: 1;
+}
+
+.ai-panel-close:hover {
+  color: #ff4757;
+  transform: rotate(90deg);
+}
+
+.ai-panel-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.ai-panel-input-group input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 2px solid rgba(0, 225, 255, 0.3);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  outline: none;
+  transition: 0.3s;
+}
+
+.ai-panel-input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ai-panel-input-group input:focus {
+  border-color: #00e1ff;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 15px rgba(0, 225, 255, 0.2);
+}
+
+.ai-panel-input-group button {
+  padding: 14px 22px;
+  background: linear-gradient(135deg, #00e1ff, #7b61ff);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.ai-panel-input-group button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 225, 255, 0.4);
+}
+
+.ai-panel-input-group button:disabled {
+  background: #555;
+  color: #999;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 520px) {
+  .ai-panel-input-group {
+    flex-direction: column;
+  }
+  .ai-panel-content {
+    padding: 30px 20px;
+  }
+}

@@ -33,6 +33,11 @@ spec:
             configMapKeyRef:
               name: backend-config
               key: PORT
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: GEMINI_API_KEY
         - name: APP_VERSION
           value: "canary"
         resources:
