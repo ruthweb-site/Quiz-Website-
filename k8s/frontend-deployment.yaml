@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: ruthran1803/quiz-frontend:v2
+        image: ruthran1803/quiz-frontend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80

@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        BACKEND_IMAGE = "ruthran1803/quiz-backend:v2"
-        FRONTEND_IMAGE = "ruthran1803/quiz-frontend:v2"
+        BACKEND_IMAGE = "ruthran1803/quiz-backend:latest"
+        FRONTEND_IMAGE = "ruthran1803/quiz-frontend:latest"
     }
 
     stages {

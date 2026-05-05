@@ -23,7 +23,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: ruthran1803/quiz-backend:v2
+        image: ruthran1803/quiz-backend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         env:
